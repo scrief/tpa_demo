@@ -62,15 +62,6 @@ def show_login_form():
                     st.rerun()
                 else:
                     st.error("❌ Invalid username or password")
-    
-    # Demo credentials info
-    st.info("""
-        **Demo Credentials:**
-        
-        Regular User: `demo` / `demo123`
-        
-        Admin User: `admin` / `admin123`
-    """)
 
 
 def show_signup_form():
