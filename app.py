@@ -31,7 +31,7 @@ except ImportError as e:
 # Authentication imports
 try:
     from auth import is_logged_in, get_current_user, logout_user, is_admin
-    from pages.login import show_login_page
+    from pages._login import show_login_page
     AUTH_AVAILABLE = True
 except ImportError as e:
     print(f"Authentication not available: {e}")
