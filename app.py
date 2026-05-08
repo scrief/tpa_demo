@@ -504,6 +504,13 @@ def show_match_form():
     # Get AI-parsed data if available
     ai_data = st.session_state.get('ai_parsed_data', {})
     
+    # Initialize form_selected_states from AI data if needed (before form starts)
+    ai_states = ai_data.get('required_states', [])
+    if ai_states and 'form_selected_states' not in st.session_state:
+        st.session_state.form_selected_states = set(ai_states)
+    elif 'form_selected_states' not in st.session_state:
+        st.session_state.form_selected_states = set()
+    
     with st.form("match_request_form"):
         # Section 1: Basic Information
         st.markdown("### 📋 Basic Information")
@@ -597,22 +604,13 @@ def show_match_form():
         all_states = [row[0] for row in cursor.fetchall()]
         conn.close()
         
-        # Get AI-suggested states and initialize session state if needed
-        ai_states = ai_data.get('required_states', [])
-        
-        # Initialize selected_states in session state if AI data exists
-        if ai_states and 'form_selected_states' not in st.session_state:
-            st.session_state.form_selected_states = set(ai_states)
-        elif 'form_selected_states' not in st.session_state:
-            st.session_state.form_selected_states = set()
-        
         st.info("💡 Click the arrow below to expand and select states. Click again to collapse.")
         
         # Track selected states
         selected_states_dict = {}
         
         # Single expander with all states
-        with st.expander(f"📍 Select Required States ({len(all_states)} available)", expanded=(len(ai_states) > 0)):
+        with st.expander(f"📍 Select Required States ({len(all_states)} available)", expanded=(len(st.session_state.form_selected_states) > 0)):
             # Display checkboxes in a 5-column grid for compact layout
             cols = st.columns(5)
             for idx, state in enumerate(sorted(all_states)):
