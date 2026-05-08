@@ -453,6 +453,15 @@ def show_match_form():
                                     st.session_state['ai_parsed_data'] = parsed_data
                                     st.session_state['ai_narrative'] = narrative_input
                                     
+                                    # Clear form_selected_states so it reinitializes from AI data
+                                    if 'form_selected_states' in st.session_state:
+                                        del st.session_state['form_selected_states']
+                                    
+                                    # Clear all state checkbox keys to force reinitialization
+                                    keys_to_delete = [key for key in st.session_state.keys() if key.startswith('state_checkbox_')]
+                                    for key in keys_to_delete:
+                                        del st.session_state[key]
+                                    
                                     # Log interaction
                                     try:
                                         provider = os.getenv('AI_PROVIDER', 'openai')
@@ -497,6 +506,10 @@ def show_match_form():
                             del st.session_state['ai_narrative']
                         if 'form_selected_states' in st.session_state:
                             del st.session_state['form_selected_states']
+                        # Clear all state checkbox keys
+                        keys_to_delete = [key for key in st.session_state.keys() if key.startswith('state_checkbox_')]
+                        for key in keys_to_delete:
+                            del st.session_state[key]
                         st.rerun()
         
         st.markdown("---")
@@ -835,6 +848,10 @@ def show_match_form():
             st.session_state['pending_match_request'] = None
             if 'form_selected_states' in st.session_state:
                 del st.session_state['form_selected_states']
+            # Clear all state checkbox keys
+            keys_to_delete = [key for key in st.session_state.keys() if key.startswith('state_checkbox_')]
+            for key in keys_to_delete:
+                del st.session_state[key]
 
 def get_priority_label(priority_value):
     """Get human-readable label for priority value."""
