@@ -495,6 +495,8 @@ def show_match_form():
                         del st.session_state['ai_parsed_data']
                         if 'ai_narrative' in st.session_state:
                             del st.session_state['ai_narrative']
+                        if 'form_selected_states' in st.session_state:
+                            del st.session_state['form_selected_states']
                         st.rerun()
         
         st.markdown("---")
@@ -595,8 +597,14 @@ def show_match_form():
         all_states = [row[0] for row in cursor.fetchall()]
         conn.close()
         
-        # Get AI-suggested states
+        # Get AI-suggested states and initialize session state if needed
         ai_states = ai_data.get('required_states', [])
+        
+        # Initialize selected_states in session state if AI data exists
+        if ai_states and 'form_selected_states' not in st.session_state:
+            st.session_state.form_selected_states = set(ai_states)
+        elif 'form_selected_states' not in st.session_state:
+            st.session_state.form_selected_states = set()
         
         st.info("💡 Click the arrow below to expand and select states. Click again to collapse.")
         
@@ -611,7 +619,7 @@ def show_match_form():
                 with cols[idx % 5]:
                     is_selected = st.checkbox(
                         state,
-                        value=(state in ai_states),
+                        value=(state in st.session_state.form_selected_states),
                         key=f"state_checkbox_{state}"
                     )
                     selected_states_dict[state] = is_selected
@@ -827,6 +835,8 @@ def show_match_form():
             # Clear session state
             st.session_state['form_submitted'] = False
             st.session_state['pending_match_request'] = None
+            if 'form_selected_states' in st.session_state:
+                del st.session_state['form_selected_states']
 
 def get_priority_label(priority_value):
     """Get human-readable label for priority value."""
