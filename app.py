@@ -1095,7 +1095,7 @@ def show_match_results(buyer_id):
         st.markdown("#### Vendor Comparison")
         radar_chart = create_radar_chart(matches)
         if radar_chart:
-            st.plotly_chart(radar_chart, use_container_width=True)
+            st.plotly_chart(radar_chart, use_container_width=True, key=f"radar_chart_{buyer_id}")
         st.markdown("---")
     
     # Display each match
@@ -1139,7 +1139,7 @@ def show_match_results(buyer_id):
                 
                 # Show bar chart
                 bar_chart = create_score_bar_chart(score_categories)
-                st.plotly_chart(bar_chart, use_container_width=True)
+                st.plotly_chart(bar_chart, use_container_width=True, key=f"bar_chart_{buyer_id}_{vendor_id}")
             
             with col2:
                 # Human review flag
