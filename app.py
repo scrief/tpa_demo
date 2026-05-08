@@ -28,6 +28,15 @@ except ImportError as e:
     print(f"AI features not available: {e}")
     AI_FEATURES_AVAILABLE = False
 
+# Authentication imports
+try:
+    from auth import is_logged_in, get_current_user, logout_user, is_admin
+    from pages.login import show_login_page
+    AUTH_AVAILABLE = True
+except ImportError as e:
+    print(f"Authentication not available: {e}")
+    AUTH_AVAILABLE = False
+
 # Page configuration
 st.set_page_config(
     page_title="TPA Match Demo | Commonpoint",
@@ -1401,8 +1410,31 @@ def main():
     # Load custom CSS
     load_custom_css()
     
+    # Check authentication
+    if AUTH_AVAILABLE and not is_logged_in():
+        show_login_page()
+        return
+    
+    # Get current user
+    current_user = get_current_user() if AUTH_AVAILABLE else None
+    
     # Sidebar navigation
     st.sidebar.markdown("## Navigation")
+    
+    # User info section
+    if current_user:
+        st.sidebar.markdown(f"**👤 {current_user['full_name'] or current_user['username']}**")
+        if is_admin():
+            st.sidebar.caption("🔑 Admin")
+        st.sidebar.markdown("---")
+        
+        # Logout button
+        if st.sidebar.button("🚪 Logout", use_container_width=True):
+            logout_user()
+            st.rerun()
+        
+        st.sidebar.markdown("---")
+    
     page = st.sidebar.radio(
         "Select a page:",
         ["🏠 Home", "🎯 New Match Request", "📊 View Results", "📁 Browse Vendors"],
