@@ -469,9 +469,9 @@ def show_match_form():
                                     
                                     # Show extracted info
                                     if parsed_data.get('extraction_notes'):
-                                        with st.expander("📝 Extraction Notes"):
-                                            for note in parsed_data['extraction_notes']:
-                                                st.info(note)
+                                        st.markdown("**📝 Extraction Notes:**")
+                                        for note in parsed_data['extraction_notes']:
+                                            st.info(note)
                                     
                                     st.rerun()
                                     

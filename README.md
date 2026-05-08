@@ -2,9 +2,9 @@
 
 **A sophisticated vendor matching system for Third Party Administrators (TPAs) in the insurance claims space.**
 
-**Status:** Phase 8 Complete - Streamlit UI Functional  
+**Status:** Phase 9 Complete - AI Features Integrated  
 **Brand:** Commonpoint  
-**Ready to Demo:** Yes
+**Ready to Demo:** Yes (with API key configuration)
 
 ---
 
@@ -18,6 +18,40 @@ streamlit run app.py
 
 **Opens at:** `http://localhost:8501`
 
+### Enable AI Features (Optional)
+
+1. Copy the template:
+   ```bash
+   cp .env.template .env
+   ```
+
+2. Configure your AI provider in `.env`:
+   
+   **Option A - Google Gemini (Default):**
+   ```
+   AI_PROVIDER=gemini
+   GOOGLE_API_KEY=your_gemini_api_key_here
+   GEMINI_PARSING_MODEL=gemini-2.5-flash
+   GEMINI_EXPLANATION_MODEL=gemini-2.5-flash
+   ```
+   Get your key from: https://aistudio.google.com/app/apikey
+   
+   **Option B - OpenAI:**
+   ```
+   AI_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_PARSING_MODEL=gpt-4o
+   OPENAI_EXPLANATION_MODEL=gpt-4o-mini
+   ```
+   Get your key from: https://platform.openai.com/api-keys
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Restart the app
+
 ---
 
 ## What This Is
@@ -28,6 +62,7 @@ A demo application that matches insurance buyers with TPA vendors using:
 - **Transparent reason codes** explaining every ranking
 - **Human review flags** for quality assurance
 - **100% validated** matching engine
+- **AI-powered features** for natural language parsing and explanations
 
 ---
 
@@ -57,13 +92,22 @@ A demo application that matches insurance buyers with TPA vendors using:
 - Comment collection for improvement
 - Database persistence for analysis
 
+### 🤖 AI-Powered Features (Phase 9)
+- Natural language parsing of buyer requests
+- Dual AI provider support (Google Gemini or OpenAI)
+- AI-generated plain-English explanations
+- Hallucination detection for accuracy
+- Follow-up questions for better matches
+- All AI features optional and transparent
+
 ---
 
 ## Project Structure
 
 ```
 TPA Demo/
-├── app.py                              # Streamlit web application
+├── app.py                              # Streamlit web application (with AI features)
+├── .env.template                        # API key template (Phase 9)
 ├── .streamlit/config.toml              # Brand theme configuration
 ├── requirements.txt                     # Python dependencies
 ├── database/
@@ -75,14 +119,22 @@ TPA Demo/
 │   ├── test_streamlit_app.py           # UI tests
 │   ├── create_database.py              # Database schema
 │   ├── seed_sample_data.py             # Sample data generator
-│   └── clean_data.py                   # Data cleaning
+│   ├── clean_data.py                   # Data cleaning
+│   ├── parse_narrative_request.py      # AI parsing (Phase 9)
+│   ├── generate_explanation.py         # AI explanations (Phase 9)
+│   ├── detect_hallucinations.py        # Hallucination detection (Phase 9)
+│   ├── generate_followup_questions.py  # Follow-up questions (Phase 9)
+│   ├── add_ai_interactions_table.py    # DB migration (Phase 9)
+│   └── test_ai_features.py             # AI test suite (Phase 9)
 ├── data/
 │   ├── validation_scenarios.json       # 25 test scenarios
-│   └── edge_case_scenarios.json        # Edge case documentation
+│   ├── edge_case_scenarios.json        # Edge case documentation
+│   └── ai_test_cases.json              # AI feature tests (Phase 9)
 ├── tpa-match-demo-docs/                # Full project specifications
 ├── PROJECT_OVERVIEW.md                 # Project overview and status
 ├── PHASE_8_UI_GUIDE.md                 # UI implementation guide
 ├── PHASE_8_COMPLETION_SUMMARY.md       # Phase 8 results
+├── PHASE_9_COMPLETION_SUMMARY.md       # Phase 9 results (AI features)
 ├── VALIDATION_TESTING_GUIDE.md         # Testing documentation
 └── README.md                           # This file
 ```
@@ -115,6 +167,10 @@ streamlit run app.py
 # Run UI tests (5 automated tests)
 python scripts/test_streamlit_app.py
 
+# Test AI features (Phase 9)
+python scripts/test_ai_features.py --all
+python scripts/test_ai_features.py --test parsing
+
 # Test matching engine for buyer #1
 python scripts/match_vendors.py 1
 
@@ -143,6 +199,8 @@ pip install -r requirements.txt
 - streamlit >= 1.30.0
 - plotly >= 5.0.0
 - sqlite3 (built-in)
+- openai >= 1.0.0 (Phase 9 - optional)
+- python-dotenv >= 1.0.0 (Phase 9 - optional)
 
 ---
 
@@ -176,7 +234,7 @@ python scripts/validate_matches.py
 | 6 | ✅ Complete | Matching engine (validated) |
 | 7 | ✅ Complete | Validation framework (100% pass) |
 | 8 | ✅ Complete | Streamlit UI (Commonpoint brand) |
-| 9 | ⏳ Next | AI explanation layer |
+| 9 | ✅ Complete | AI explanation layer |
 
 ---
 
@@ -190,6 +248,11 @@ python scripts/validate_matches.py
 - `PHASE_8_UI_GUIDE.md` - Implementation guide (600+ lines)
 - `PHASE_8_COMPLETION_SUMMARY.md` - Completion report
 - `PHASE_8_UPDATES.md` - Post-launch improvements and bug fixes
+
+**Phase 9 (AI Features):**
+- `PHASE_9_COMPLETION_SUMMARY.md` - AI features completion report
+- `.env.template` - API key configuration template
+- `data/ai_test_cases.json` - AI test scenarios
 
 **Validation:**
 - `VALIDATION_TESTING_GUIDE.md` - Testing framework (550+ lines)
@@ -244,8 +307,9 @@ python scripts/validate_matches.py
 
 **Code:**
 - 900+ lines (matching engine)
-- 950+ lines (Streamlit UI)
+- 1,270+ lines (Streamlit UI with AI features)
 - 700+ lines (validation suite)
+- 2,400+ lines (AI features - Phase 9)
 - 100% test coverage on critical paths
 
 ---
@@ -278,6 +342,9 @@ python scripts/validate_matches.py
 - Importance of comprehensive validation
 - Rapid UI development with Streamlit
 - Brand identity integration in web applications
+- AI integration with hallucination prevention
+- Graceful degradation and user control
+- Prompt engineering for accuracy
 
 ---
 
@@ -303,13 +370,19 @@ python scripts/validate_matches.py
 
 ## Next Steps
 
-**For Phase 9 (AI Explanation Layer):**
-1. Read `PHASE_8_UI_GUIDE.md` to understand the UI
+**For Demos:**
+1. Set up OpenAI API key (optional): Copy `.env.template` to `.env`
 2. Test the app: `streamlit run app.py`
-3. Review form structure (natural language field ready)
-4. Add AI parsing for narrative requests
-5. Generate plain-English explanations from reason codes
-6. Implement hallucination detection using validation framework
+3. Try AI parsing: Describe needs in natural language
+4. Generate AI explanations: Click button on match results
+5. Review hallucination detection in action
+
+**For Development:**
+1. Run AI tests: `python scripts/test_ai_features.py --all`
+2. Optimize prompts based on results
+3. Collect user feedback on AI features
+4. Monitor hallucination rates
+5. Iterate on prompt engineering
 
 ---
 
@@ -319,9 +392,10 @@ This is a demo/portfolio project. Not for production use without proper review.
 
 ---
 
-**Status:** ✅ Phase 8 Complete - Ready for Demo  
+**Status:** ✅ Phase 9 Complete - AI Features Integrated  
 **Launch:** `streamlit run app.py`  
 **Brand:** Commonpoint Professional Identity  
-**Quality:** Production-ready with 100% test coverage
+**Quality:** Production-ready with 100% test coverage  
+**AI Features:** Optional, transparent, and hallucination-protected
 
-🚀 Ready to show off!
+🚀 Ready to show off with AI-powered enhancements!
