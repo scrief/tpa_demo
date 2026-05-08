@@ -266,6 +266,9 @@ def seed_vendors(cursor):
                 {"state_code": "OR", "coverage_strength": "strong", "local_adjuster_network": 1},
                 {"state_code": "WA", "coverage_strength": "strong", "local_adjuster_network": 1},
                 {"state_code": "AZ", "coverage_strength": "moderate", "local_adjuster_network": 1},
+                {"state_code": "HI", "coverage_strength": "moderate", "local_adjuster_network": 0},
+                {"state_code": "NV", "coverage_strength": "moderate", "local_adjuster_network": 1},
+                {"state_code": "AK", "coverage_strength": "limited", "local_adjuster_network": 0},
             ],
             "claim_types": [
                 {"claim_type": "workers_comp", "capability_level": "strong", "primary_focus": 1},
@@ -385,6 +388,12 @@ def seed_vendors(cursor):
                 {"state_code": "PA", "coverage_strength": "strong", "local_adjuster_network": 1},
                 {"state_code": "CT", "coverage_strength": "moderate", "local_adjuster_network": 1},
                 {"state_code": "MA", "coverage_strength": "moderate", "local_adjuster_network": 0},
+                {"state_code": "DE", "coverage_strength": "moderate", "local_adjuster_network": 1},
+                {"state_code": "ME", "coverage_strength": "limited", "local_adjuster_network": 0},
+                {"state_code": "NH", "coverage_strength": "moderate", "local_adjuster_network": 1},
+                {"state_code": "RI", "coverage_strength": "moderate", "local_adjuster_network": 1},
+                {"state_code": "VT", "coverage_strength": "limited", "local_adjuster_network": 0},
+                {"state_code": "WV", "coverage_strength": "moderate", "local_adjuster_network": 1},
             ],
             "claim_types": [
                 {"claim_type": "workers_comp", "capability_level": "strong", "primary_focus": 1},
@@ -427,6 +436,8 @@ def seed_vendors(cursor):
                 {"state_code": "SC", "coverage_strength": "strong", "local_adjuster_network": 1},
                 {"state_code": "NC", "coverage_strength": "moderate", "local_adjuster_network": 1},
                 {"state_code": "TN", "coverage_strength": "moderate", "local_adjuster_network": 0},
+                {"state_code": "AL", "coverage_strength": "strong", "local_adjuster_network": 1},
+                {"state_code": "MS", "coverage_strength": "moderate", "local_adjuster_network": 1},
             ],
             "claim_types": [
                 {"claim_type": "workers_comp", "capability_level": "strong", "primary_focus": 1},
@@ -467,6 +478,7 @@ def seed_vendors(cursor):
                 {"state_code": "TX", "coverage_strength": "strong", "local_adjuster_network": 1},
                 {"state_code": "OK", "coverage_strength": "moderate", "local_adjuster_network": 0},
                 {"state_code": "LA", "coverage_strength": "limited", "local_adjuster_network": 0},
+                {"state_code": "AR", "coverage_strength": "moderate", "local_adjuster_network": 1},
             ],
             "claim_types": [
                 {"claim_type": "workers_comp", "capability_level": "strong", "primary_focus": 1},

@@ -1,6 +1,7 @@
 """
 TPA Match Demo - Streamlit Web Interface
 Commonpoint Brand Identity Applied
+Phase 9: AI Features Integrated
 """
 
 import streamlit as st
@@ -12,6 +13,20 @@ from datetime import datetime
 import sys
 import plotly.graph_objects as go
 import plotly.express as px
+import os
+
+# Phase 9: AI feature imports
+sys.path.append(str(Path(__file__).parent / "scripts"))
+try:
+    from parse_narrative_request import parse_narrative_request
+    from generate_explanation import generate_explanation
+    from detect_hallucinations import detect_hallucinations
+    from generate_followup_questions import generate_followup_from_buyer_id
+    from add_ai_interactions_table import log_ai_interaction
+    AI_FEATURES_AVAILABLE = True
+except ImportError as e:
+    print(f"AI features not available: {e}")
+    AI_FEATURES_AVAILABLE = False
 
 # Page configuration
 st.set_page_config(
@@ -397,6 +412,87 @@ def show_match_form():
     
     st.markdown("---")
     
+    # Phase 9: AI-Powered Natural Language Parsing
+    if AI_FEATURES_AVAILABLE:
+        with st.expander("🤖 Try AI-Powered Request Parsing (Optional)", expanded=False):
+            st.markdown("""
+                Describe your needs in plain English, and our AI will extract the structured information 
+                to pre-fill the form below. You can always edit any field afterward.
+            """)
+            
+            narrative_input = st.text_area(
+                "Describe your TPA needs",
+                placeholder="e.g., We need a workers' comp TPA for a manufacturing company with 500 employees in Minnesota, Wisconsin, and Iowa. Return-to-work programs and strong reporting capabilities are critical. Our current TPA has been slow to respond to claims.",
+                height=120,
+                key="ai_narrative_input"
+            )
+            
+            col1, col2 = st.columns([1, 4])
+            with col1:
+                if st.button("🤖 Parse with AI", type="secondary", key="parse_button"):
+                    if narrative_input:
+                        with st.spinner("Parsing your request..."):
+                            try:
+                                parsed_data = parse_narrative_request(narrative_input)
+                                
+                                if 'error' in parsed_data:
+                                    st.error(f"Parsing failed: {parsed_data['error']}")
+                                else:
+                                    confidence = parsed_data.get('confidence_score', 0)
+                                    
+                                    # Store parsed data in session state
+                                    st.session_state['ai_parsed_data'] = parsed_data
+                                    st.session_state['ai_narrative'] = narrative_input
+                                    
+                                    # Log interaction
+                                    try:
+                                        provider = os.getenv('AI_PROVIDER', 'openai')
+                                        if provider == 'gemini':
+                                            model_used = os.getenv('GEMINI_PARSING_MODEL', 'gemini-1.5-pro')
+                                        else:
+                                            model_used = os.getenv('OPENAI_PARSING_MODEL', 'gpt-4o')
+                                        
+                                        log_ai_interaction(
+                                            interaction_type='parse',
+                                            input_text=narrative_input,
+                                            output_json=json.dumps(parsed_data),
+                                            model_used=model_used,
+                                            confidence_score=confidence
+                                        )
+                                    except:
+                                        pass  # Don't fail if logging fails
+                                    
+                                    if confidence >= 0.7:
+                                        st.success(f"✅ Parsed with {confidence*100:.0f}% confidence! Form fields below have been pre-filled.")
+                                    else:
+                                        st.warning(f"⚠️ Parsed with {confidence*100:.0f}% confidence. Please review and adjust the form fields below.")
+                                    
+                                    # Show extracted info
+                                    if parsed_data.get('extraction_notes'):
+                                        with st.expander("📝 Extraction Notes"):
+                                            for note in parsed_data['extraction_notes']:
+                                                st.info(note)
+                                    
+                                    st.rerun()
+                                    
+                            except Exception as e:
+                                st.error(f"Error during parsing: {str(e)}")
+                    else:
+                        st.error("Please enter a description first")
+            
+            with col2:
+                if 'ai_parsed_data' in st.session_state:
+                    if st.button("🔄 Clear AI Data", type="secondary", key="clear_ai_button"):
+                        del st.session_state['ai_parsed_data']
+                        if 'ai_narrative' in st.session_state:
+                            del st.session_state['ai_narrative']
+                        st.rerun()
+        
+        st.markdown("---")
+    
+    # Get AI-parsed data if available
+    ai_data = st.session_state.get('ai_parsed_data', {})
+    
     with st.form("match_request_form"):
         # Section 1: Basic Information
         st.markdown("### 📋 Basic Information")
@@ -405,24 +501,32 @@ def show_match_form():
         with col1:
             buyer_name = st.text_input(
                 "Company Name *",
+                value=ai_data.get('buyer_name', ''),
                 placeholder="e.g., ABC Manufacturing",
                 help="Enter your company name"
             )
             
+            # Get AI-suggested industry or default
+            ai_industry = ai_data.get('industry')
+            industry_options = [
+                "manufacturing",
+                "construction",
+                "healthcare",
+                "retail",
+                "hospitality",
+                "transportation",
+                "technology",
+                "professional_services",
+                "education",
+                "government"
+            ]
+            
+            industry_index = industry_options.index(ai_industry) if ai_industry in industry_options else 0
+            
             industry = st.selectbox(
                 "Industry *",
-                [
-                    "manufacturing",
-                    "construction",
-                    "healthcare",
-                    "retail",
-                    "hospitality",
-                    "transportation",
-                    "technology",
-                    "professional_services",
-                    "education",
-                    "government"
-                ],
+                industry_options,
+                index=industry_index,
                 format_func=lambda x: x.replace('_', ' ').title()
             )
             
@@ -430,31 +534,43 @@ def show_match_form():
                 "Employee Count",
                 min_value=0,
                 max_value=100000,
-                value=0,
+                value=int(ai_data.get('employee_count', 0)) if ai_data.get('employee_count') else 0,
                 step=1,
                 help="Approximate number of employees"
             )
         
         with col2:
+            # Get AI-suggested claim type
+            ai_claim_type = ai_data.get('claim_type_needed')
+            claim_type_options = [
+                "workers_comp",
+                "general_liability",
+                "auto_liability",
+                "property",
+                "multi_line"
+            ]
+            claim_type_index = claim_type_options.index(ai_claim_type) if ai_claim_type in claim_type_options else 0
+            
             claim_type_needed = st.selectbox(
                 "Claim Type Needed *",
-                [
-                    "workers_comp",
-                    "general_liability",
-                    "auto_liability",
-                    "property",
-                    "multi_line"
-                ],
+                claim_type_options,
+                index=claim_type_index,
                 format_func=lambda x: x.replace('_', ' ').title()
             )
             
+            # Get AI-suggested program type
+            ai_program_type = ai_data.get('program_type')
+            program_type_options = [
+                "self_insured",
+                "fully_insured",
+                "large_deductible"
+            ]
+            program_type_index = program_type_options.index(ai_program_type) if ai_program_type in program_type_options else 0
+            
             program_type = st.selectbox(
                 "Program Type",
-                [
-                    "self_insured",
-                    "fully_insured",
-                    "large_deductible"
-                ],
+                program_type_options,
+                index=program_type_index,
                 format_func=lambda x: x.replace('_', ' ').title()
             )
         
@@ -463,29 +579,40 @@ def show_match_form():
         # Section 2: Geographic Requirements
         st.markdown("### 🗺️ Geographic Requirements")
         
+        # Get all available states from DB
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT DISTINCT state_code FROM vendor_states ORDER BY state_code")
         all_states = [row[0] for row in cursor.fetchall()]
         conn.close()
         
-        st.write("**Select Required States:** Check all states where you need TPA coverage")
+        # Get AI-suggested states
+        ai_states = ai_data.get('required_states', [])
         
-        # Create grid of checkboxes (6 columns)
-        cols_per_row = 6
-        rows = [all_states[i:i + cols_per_row] for i in range(0, len(all_states), cols_per_row)]
+        st.info("💡 Click the arrow below to expand and select states. Click again to collapse.")
         
-        required_states = []
-        for row in rows:
-            cols = st.columns(cols_per_row)
-            for idx, state in enumerate(row):
-                with cols[idx]:
-                    if st.checkbox(state, key=f"state_{state}"):
-                        required_states.append(state)
+        # Track selected states
+        selected_states_dict = {}
         
-        # Show selected count
+        # Single expander with all states
+        with st.expander(f"📍 Select Required States ({len(all_states)} available)", expanded=(len(ai_states) > 0)):
+            # Display checkboxes in a 5-column grid for compact layout
+            cols = st.columns(5)
+            for idx, state in enumerate(sorted(all_states)):
+                with cols[idx % 5]:
+                    is_selected = st.checkbox(
+                        state,
+                        value=(state in ai_states),
+                        key=f"state_checkbox_{state}"
+                    )
+                    selected_states_dict[state] = is_selected
+        
+        # Collect all selected states
+        required_states = [state for state, selected in selected_states_dict.items() if selected]
+        
+        # Show selection summary
         if required_states:
-            st.success(f"✅ {len(required_states)} state(s) selected: {', '.join(sorted(required_states))}")
+            st.success(f"✅ **{len(required_states)} states selected:** {', '.join(sorted(required_states))}")
         else:
             st.warning("⚠️ Please select at least one state")
         
@@ -493,7 +620,7 @@ def show_match_form():
             "Priority: Geographic Coverage",
             min_value=1,
             max_value=5,
-            value=3,
+            value=ai_data.get('priority_geography', 3),
             help="1 = Very Low, 3 = Moderate, 5 = Critical"
         )
         
@@ -513,9 +640,13 @@ def show_match_form():
             "legal_support"
         ]
         
+        # Get AI-suggested services
+        ai_services = ai_data.get('required_services', [])
+        
         required_services = st.multiselect(
             "Required Services",
             service_options,
+            default=ai_services,
             format_func=lambda x: x.replace('_', ' ').title(),
             help="Select all services you require from your TPA"
         )
@@ -524,7 +655,7 @@ def show_match_form():
             "Priority: Service Capability",
             min_value=1,
             max_value=5,
-            value=3,
+            value=ai_data.get('priority_services', 3),
             help="How important are these specific services?"
         )
         
@@ -535,6 +666,16 @@ def show_match_form():
         # Section 4: Other Priorities
         st.markdown("### 📊 Other Priorities")
         
+        st.info("""
+            **How Priority Sliders Work:** Use these sliders to tell us what matters most in your TPA selection. 
+            Higher priority areas will have a greater impact on vendor rankings. Each category is scored and 
+            weighted based on your priorities to find the best overall match for your specific needs.
+            
+            - **1-2 (Low):** Nice to have, but not a deciding factor
+            - **3 (Moderate):** Standard importance - the default
+            - **4-5 (High/Critical):** Must be excellent - strongly influences rankings
+        """)
+        
         col1, col2 = st.columns(2)
         
         with col1:
@@ -542,7 +683,7 @@ def show_match_form():
                 "Claims Capability",
                 min_value=1,
                 max_value=5,
-                value=3,
+                value=ai_data.get('priority_claims', 3),
                 help="How important is expertise in your specific claim type?"
             )
             st.caption(f"**{get_priority_label(priority_claims)}**")
@@ -551,7 +692,7 @@ def show_match_form():
                 "Industry Experience",
                 min_value=1,
                 max_value=5,
-                value=3,
+                value=ai_data.get('priority_industry', 3),
                 help="How important is experience in your industry?"
             )
             st.caption(f"**{get_priority_label(priority_industry)}**")
@@ -560,7 +701,7 @@ def show_match_form():
                 "Reporting & Analytics",
                 min_value=1,
                 max_value=5,
-                value=3,
+                value=ai_data.get('priority_reporting', 3),
                 help="How important are reporting capabilities?"
             )
             st.caption(f"**{get_priority_label(priority_reporting)}**")
@@ -570,7 +711,7 @@ def show_match_form():
                 "Technology Integration",
                 min_value=1,
                 max_value=5,
-                value=3,
+                value=ai_data.get('priority_technology', 3),
                 help="How important is API/system integration?"
             )
             st.caption(f"**{get_priority_label(priority_technology)}**")
@@ -579,7 +720,7 @@ def show_match_form():
                 "Cost Sensitivity",
                 min_value=1,
                 max_value=5,
-                value=3,
+                value=ai_data.get('priority_cost', 3),
                 help="How cost-sensitive is this selection? (5 = very cost-sensitive)"
             )
             st.caption(f"**{get_priority_label(priority_cost)}**")
@@ -589,8 +730,12 @@ def show_match_form():
         # Section 5: Optional Fields
         st.markdown("### 💬 Additional Information (Optional)")
         
+        # Use AI narrative if available, otherwise empty
+        default_narrative = st.session_state.get('ai_narrative', '')
+        
         narrative_request = st.text_area(
             "Describe Your Needs",
+            value=default_narrative,
             placeholder="e.g., We need a WC TPA for a self-insured manufacturing client with locations in MN, WI, and IA. RTW and reporting are major priorities.",
             help="Natural language description of your requirements"
         )
@@ -765,7 +910,7 @@ def create_radar_chart(matches):
     for match in top_vendors:
         (rank, vendor_name, _, _, _, _, geo_score, claims_score, industry_score, 
          service_score, reporting_score, performance_score, tech_score, 
-         quality_score, _, _, _) = match
+         quality_score, _, _, _, _) = match  # Added extra _ for vendor_id (18th value)
         
         # Normalize scores to percentage of max for each category
         scores = [
@@ -914,7 +1059,8 @@ def show_match_results(buyer_id):
             m.data_quality_score,
             m.reason_codes,
             m.risk_flags,
-            m.human_review_required
+            m.human_review_required,
+            v.vendor_id
         FROM match_results m
         JOIN vendors v ON m.vendor_id = v.vendor_id
         WHERE m.buyer_request_id = ?
@@ -948,7 +1094,7 @@ def show_match_results(buyer_id):
         (rank, vendor_name, hq_state, company_size, pricing_level, 
          total_score, geo_score, claims_score, industry_score, service_score,
          reporting_score, performance_score, tech_score, quality_score,
-         reason_codes_json, risk_flags_json, human_review) = match
+         reason_codes_json, risk_flags_json, human_review, vendor_id) = match
         
         # Score badge
         badge_class = get_score_badge_class(total_score)
@@ -1012,6 +1158,115 @@ def show_match_results(buyer_id):
                         st.markdown("#### ⚠️ Considerations")
                         for flag in risk_flags:
                             st.warning(format_risk_flag(flag))
+            
+            # Phase 9: AI Explanation Section
+            if AI_FEATURES_AVAILABLE:
+                st.markdown("---")
+                st.markdown("#### 🤖 AI-Generated Explanation")
+                
+                explanation_key = f"explanation_{buyer_id}_{vendor_id}"
+                hallucinations_key = f"hallucinations_{buyer_id}_{vendor_id}"
+                
+                if st.button("Generate AI Explanation", key=f"btn_explain_{buyer_id}_{vendor_id}", type="secondary"):
+                    with st.spinner("Generating explanation..."):
+                        try:
+                            result = generate_explanation(vendor_id, buyer_id)
+                            
+                            if 'error' in result:
+                                st.error(f"Failed to generate explanation: {result['error']}")
+                            else:
+                                explanation = result['explanation']
+                                
+                                # Detect hallucinations
+                                hallucinations = detect_hallucinations(explanation, vendor_id, buyer_id)
+                                
+                                # Store in session state
+                                st.session_state[explanation_key] = explanation
+                                st.session_state[hallucinations_key] = hallucinations
+                                
+                                # Log interaction
+                                try:
+                                    provider = os.getenv('AI_PROVIDER', 'openai')
+                                    if provider == 'gemini':
+                                        model_used = os.getenv('GEMINI_EXPLANATION_MODEL', 'gemini-1.5-flash')
+                                    else:
+                                        model_used = os.getenv('OPENAI_EXPLANATION_MODEL', 'gpt-4o-mini')
+                                    
+                                    log_ai_interaction(
+                                        interaction_type='explain',
+                                        input_text=f"Vendor {vendor_id}, Buyer {buyer_id}",
+                                        output_json=json.dumps(result),
+                                        model_used=model_used,
+                                        buyer_request_id=buyer_id,
+                                        hallucinations_detected=len(hallucinations),
+                                        hallucination_details=json.dumps(hallucinations) if hallucinations else None
+                                    )
+                                except:
+                                    pass
+                                
+                                st.rerun()
+                        except Exception as e:
+                            st.error(f"Error: {str(e)}")
+                
+                # Display explanation if generated
+                if explanation_key in st.session_state:
+                    explanation = st.session_state[explanation_key]
+                    hallucinations = st.session_state.get(hallucinations_key, [])
+                    
+                    # Show hallucination warnings
+                    if hallucinations:
+                        high_severity = [h for h in hallucinations if h['severity'] == 'high']
+                        medium_severity = [h for h in hallucinations if h['severity'] == 'medium']
+                        
+                        if high_severity:
+                            st.error(f"⚠️ {len(high_severity)} high-severity issue(s) detected in explanation")
+                            with st.expander("View Issues"):
+                                for h in high_severity:
+                                    st.warning(f"**{h['claim']}** - {h['issue']}")
+                        elif medium_severity:
+                            st.warning(f"⚠️ {len(medium_severity)} potential issue(s) detected")
+                            with st.expander("View Issues"):
+                                for h in medium_severity:
+                                    st.info(f"**{h['claim']}** - {h['issue']}")
+                    else:
+                        st.success("✅ Explanation verified against database")
+                    
+                    # Display explanation
+                    st.write(explanation)
+                    
+                    # Clear button
+                    if st.button("Clear Explanation", key=f"btn_clear_{buyer_id}_{vendor_id}", type="secondary"):
+                        del st.session_state[explanation_key]
+                        if hallucinations_key in st.session_state:
+                            del st.session_state[hallucinations_key]
+                        st.rerun()
+    
+    # Phase 9: Follow-up Questions Section
+    if AI_FEATURES_AVAILABLE:
+        st.markdown("---")
+        st.markdown("### 💡 Help Us Improve Your Matches")
+        
+        with st.spinner("Generating questions..."):
+            try:
+                followup_questions = generate_followup_from_buyer_id(buyer_id)
+                
+                if followup_questions and len(followup_questions) > 0:
+                    st.write("Answering these questions could help us find even better matches:")
+                    
+                    for i, question in enumerate(followup_questions):
+                        with st.expander(f"❓ Question {i+1}"):
+                            st.write(question)
+                            answer = st.text_input(
+                                "Your answer:",
+                                key=f"followup_answer_{buyer_id}_{i}",
+                                placeholder="Type your answer here..."
+                            )
+                            if answer:
+                                st.info("💡 Tip: Update your request with this information for better results")
+                else:
+                    st.success("✅ Your request is complete! No additional questions needed.")
+            except Exception as e:
+                st.error(f"Could not generate follow-up questions: {str(e)}")
     
     # Feedback section (no nested form - use session state instead)
     st.markdown("---")
