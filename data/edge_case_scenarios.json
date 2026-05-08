@@ -1,0 +1,183 @@
+{
+  "edge_cases": [
+    {
+      "scenario_id": "EDGE-001",
+      "scenario_name": "Single vendor matches - Mountain states only",
+      "buyer_request_id": 5,
+      "test_type": "boundary",
+      "expected_behavior": "Return at least 1 result, no errors or crashes",
+      "notes": "Mountain Tech Industries - limited vendors cover CO/UT/WY combination"
+    },
+    {
+      "scenario_id": "EDGE-002",
+      "scenario_name": "Very low score - but still eligible",
+      "buyer_request_id": null,
+      "test_type": "boundary",
+      "expected_behavior": "Low-scoring vendors still returned with human review flag",
+      "notes": "Vendors scoring 50-60 should appear with strong human review warnings"
+    },
+    {
+      "scenario_id": "EDGE-003",
+      "scenario_name": "Perfect tie scores",
+      "buyer_request_id": null,
+      "test_type": "tie_breaking",
+      "expected_behavior": "Deterministic ordering (by vendor_id or other tiebreaker)",
+      "notes": "Two vendors with identical scores should have consistent rank order"
+    },
+    {
+      "scenario_id": "EDGE-004",
+      "scenario_name": "All vendors have stale data",
+      "buyer_request_id": null,
+      "test_type": "data_quality",
+      "expected_behavior": "All results should have stale_vendor_data warning",
+      "notes": "If all vendor data is >180 days old, all should be flagged"
+    },
+    {
+      "scenario_id": "EDGE-005",
+      "scenario_name": "Missing required data in buyer request",
+      "buyer_request_id": null,
+      "test_type": "input_validation",
+      "expected_behavior": "Graceful error or default behavior",
+      "notes": "Buyer request missing claim_type_needed or states_needed"
+    },
+    {
+      "scenario_id": "EDGE-006",
+      "scenario_name": "Invalid buyer_request_id",
+      "buyer_request_id": 9999,
+      "test_type": "input_validation",
+      "expected_behavior": "Return empty results or clear error message",
+      "notes": "Non-existent buyer ID should not crash the system"
+    },
+    {
+      "scenario_id": "EDGE-007",
+      "scenario_name": "Buyer requests very rare claim type",
+      "buyer_request_id": null,
+      "test_type": "rare_case",
+      "expected_behavior": "Few or no matches returned with explanation",
+      "notes": "Occupational accident or professional liability may have limited vendors"
+    },
+    {
+      "scenario_id": "EDGE-008",
+      "scenario_name": "All priorities set to maximum (5)",
+      "buyer_request_id": null,
+      "test_type": "extreme_input",
+      "expected_behavior": "Weights adjust but sum to 100, results stable",
+      "notes": "When all priorities are critical, relative importance still matters"
+    },
+    {
+      "scenario_id": "EDGE-009",
+      "scenario_name": "All priorities set to minimum (1)",
+      "buyer_request_id": null,
+      "test_type": "extreme_input",
+      "expected_behavior": "Scores closer together, less differentiation",
+      "notes": "When nothing is important, vendors should score similarly"
+    },
+    {
+      "scenario_id": "EDGE-010",
+      "scenario_name": "Buyer excludes all eligible vendors",
+      "buyer_request_id": null,
+      "test_type": "negative",
+      "expected_behavior": "Return empty results with clear explanation",
+      "notes": "If excluded_vendors list contains all matches, return no results"
+    },
+    {
+      "scenario_id": "EDGE-011",
+      "scenario_name": "Multi-state buyer with no vendor coverage",
+      "buyer_request_id": null,
+      "test_type": "negative",
+      "expected_behavior": "Return partial matches or empty with explanation",
+      "notes": "Requesting states like HI + AK + rare combinations"
+    },
+    {
+      "scenario_id": "EDGE-012",
+      "scenario_name": "Database connection failure",
+      "buyer_request_id": 1,
+      "test_type": "infrastructure",
+      "expected_behavior": "Graceful error handling, no data corruption",
+      "notes": "Simulate DB unavailable - should return error, not crash"
+    },
+    {
+      "scenario_id": "EDGE-013",
+      "scenario_name": "Match results with NULL values in key fields",
+      "buyer_request_id": null,
+      "test_type": "data_quality",
+      "expected_behavior": "Handle NULL gracefully, apply appropriate penalties",
+      "notes": "Vendors with NULL in satisfaction_score or reporting_score"
+    },
+    {
+      "scenario_id": "EDGE-014",
+      "scenario_name": "Empty reason_codes or risk_flags",
+      "buyer_request_id": null,
+      "test_type": "data_quality",
+      "expected_behavior": "Empty arrays handled without errors",
+      "notes": "Some vendors may have no reason codes if all fields missing"
+    },
+    {
+      "scenario_id": "EDGE-015",
+      "scenario_name": "Score calculation overflow/underflow",
+      "buyer_request_id": null,
+      "test_type": "boundary",
+      "expected_behavior": "Scores clamped to 0-100 range",
+      "notes": "Ensure no negative scores or scores >100 due to calculation errors"
+    }
+  ],
+  "test_recommendations": [
+    {
+      "category": "Boundary Testing",
+      "tests": [
+        "Test with 1 vendor match",
+        "Test with 0 vendor matches",
+        "Test with 100+ vendor matches",
+        "Test with score = 0",
+        "Test with score = 100",
+        "Test with score at exact threshold values (70, 80, 90)"
+      ]
+    },
+    {
+      "category": "Input Validation",
+      "tests": [
+        "Invalid buyer_request_id (negative, zero, non-existent)",
+        "Missing required fields (claim_type, states)",
+        "Invalid state codes (ZZ, XX, 123)",
+        "Invalid claim type values",
+        "Malformed JSON in reason_codes or risk_flags"
+      ]
+    },
+    {
+      "category": "Data Quality",
+      "tests": [
+        "All vendors with stale data (>180 days)",
+        "All vendors with low confidence",
+        "All vendors with conflicting data",
+        "Vendors with NULL in critical fields",
+        "Vendors with empty service lists"
+      ]
+    },
+    {
+      "category": "Extreme Scenarios",
+      "tests": [
+        "All priorities = 5 (maximum)",
+        "All priorities = 1 (minimum)",
+        "One priority = 5, all others = 1",
+        "Cost priority = 5 with all high-priced vendors",
+        "50+ excluded vendors listed"
+      ]
+    },
+    {
+      "category": "Performance",
+      "tests": [
+        "Match 100 vendors against 1 buyer",
+        "Match 1000+ vendors (stress test)",
+        "Run validation on all 15 buyers sequentially",
+        "Measure execution time per match",
+        "Check for memory leaks over 1000 runs"
+      ]
+    }
+  ],
+  "implementation_notes": {
+    "test_harness": "Create test_edge_cases.py to programmatically test edge cases",
+    "mocking": "Use unittest.mock to simulate DB failures and data issues",
+    "assertions": "Check for: no crashes, appropriate error messages, data integrity",
+    "documentation": "Document expected vs actual behavior for each edge case"
+  }
+}

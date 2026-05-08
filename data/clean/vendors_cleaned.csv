@@ -1,0 +1,29 @@
+vendor_name,headquarters_state,states_served,claim_types,industries,years_in_business,satisfaction_score,avg_response_time_days,last_updated,source,contact_email,data_quality_flags
+NorthStar Claims,MN,"MN,WI,IA",workers_comp,"manufacturing,construction",18,91.0,1.6,2026-02-01,Broker Profile,contact@northstar.com,
+North Star Claims,MN,,workers_comp,"manufacturing,construction,healthcare",18,91.0,1.6,2026-02-01,Vendor Website,,"unknown_states,missing_states"
+Midwest TPA Group,,"WI,IA,MN","workers_comp,auto_liability","retail,manufacturing",24,84.0,2.2,2025-11-18,Proposal,midwest@example.com,unknown_headquarters_state
+MIDWEST TPA GROUP,WI,"WI,IA",workers_comp,retail,24,82.0,2.3,2025-11-01,Broker Notes,,
+Lakeside Claims Administration,IL,"IL,WI,IN","general_liability,workers_comp","retail,hospitality",9,78.0,3.8,2024-06-15,Self Reported,info@lakeside.com,
+Summit Risk Services,CO,"MN,WI,IA,CA,TX,FL","workers_comp,general_liability,auto_liability","manufacturing,transportation,healthcare",31,89.0,1.9,2026-01-09,Broker Database,summit@example.com,
+Coastal Claims Partners,CA,,"workers_comp,general_liability","healthcare,technology,hospitality",14,86.0,2.0,2026-03-05,Broker Profile,coastal@example.com,"unknown_states,missing_states"
+Great Lakes Claims,OH,"OH,MI,PA,IN",workers_comp,"manufacturing,construction",22,87.0,1.9,2025-12-10,Multiple Sources,greatlakes@example.com,
+Great Lakes Claims,OH,"OH,MI,IN,KY","workers_comp,general_liability",manufacturing,22,85.0,,2025-12-01,Proposal,,
+Heartland TPA,MO,,workers_comp,"manufacturing,retail,hospitality",16,82.0,2.5,2026-01-22,Broker Profile,,"unknown_states,missing_states"
+Atlantic Claims Group,NY,"NY,NJ,PA,CT,MA","workers_comp,general_liability","construction,manufacturing,healthcare",27,88.0,1.7,2026-02-18,Broker Database,atlantic@example.com,
+Southeast Risk Partners,GA,,"workers_comp,general_liability,auto_liability","construction,hospitality,retail",19,85.0,2.1,2026-01-30,Broker Profile,,"unknown_states,missing_states"
+Texas Claims Unlimited,TX,"TX,OK,LA","workers_comp,general_liability,auto_liability","construction,transportation,manufacturing",21,83.0,2.3,2025-10-05,Broker Profile,,
+Premier Property Claims,FL,,"property,general_liability,workers_comp","real_estate,hospitality,retail",15,86.0,1.5,2026-02-25,Broker Database,,"unknown_states,missing_states"
+Professional Liability TPA,IL,"IL,OH,MO","professional_liability,general_liability,workers_comp","professional_services,healthcare,technology",12,87.0,1.8,2026-01-15,Broker Profile,,
+Legacy Claims Co.,OH,,workers_comp,manufacturing,38,75.0,4.2,2023-08-12,Broker Database,legacy@example.com,"unknown_states,missing_states"
+Midwest Claims Solutions,WI,,workers_comp,"manufacturing,retail",11,79.0,3.1,2025-09-20,Multiple Sources,,"unknown_states,missing_states"
+Midwest Claims Solutions,WI,"WI,MN",workers_comp,"manufacturing,retail",11,72.0,,,Vendor Call,midwest.solutions@example.com,unparseable_date
+Regional Risk Administrators,IA,,workers_comp,"manufacturing,retail",7,76.0,3.5,2023-11-05,Self Reported,,"unknown_states,missing_states"
+Horizon Claims Services,MN,"MN,WI,IA,ND,SD","workers_comp,general_liability","manufacturing,construction,transportation",20,88.0,1.8,2026-03-01,Broker Database,horizon@example.com,
+Pacific Northwest TPA,WA,,workers_comp,"technology,healthcare,construction",13,84.0,2.2,2026-02-10,Broker Profile,,"unknown_states,missing_states"
+Mountain States Claims,CO,"CO,WY,MT,UT,NM","workers_comp,general_liability","construction,energy,manufacturing",17,85.0,2.0,2026-01-18,Broker Profile,,
+Capital Risk Management,VA,,"workers_comp,general_liability","public_entity,education,healthcare",23,86.0,1.9,2026-02-20,Broker Database,,"unknown_states,missing_states"
+Occupational Health Claims,TX,,"occupational_accident,workers_comp","transportation,construction",9,81.0,2.4,2025-12-08,Self Reported,,"unknown_states,missing_states"
+Platinum Claims Group,IL,"IL,MN,WI,IA,OH,CA,TX,NY","workers_comp,general_liability,auto_liability",all industries,35,90.0,1.4,2026-03-10,Broker Database,platinum@example.com,
+Evergreen Risk Services,WI,,"workers_comp,general_liability","manufacturing,construction,transportation",19,87.0,1.9,2026-02-28,Broker Profile,evergreen@example.com,"unknown_states,missing_states"
+Apex Claims Management,MN,,workers_comp,"retail,hospitality",8,80.0,2.8,2025-11-30,Proposal,,"unknown_states,missing_states"
+United Claims Services,MO,"MO,KS,NE,IA,OK","workers_comp,general_liability","manufacturing,transportation,retail",26,83.0,2.2,2026-01-25,Broker Database,,

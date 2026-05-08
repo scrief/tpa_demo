@@ -1,0 +1,14 @@
+# TPA Match Demo - Python Dependencies
+
+# Data manipulation and analysis
+pandas>=2.0.0
+
+# No need to install sqlite3 - it's built into Python
+
+# Phase 8 - Web UI
+streamlit>=1.30.0
+plotly>=5.0.0
+
+# Future dependencies (for later phases):
+# openai>=1.0.0              # For Phase 9 - AI explanation layer (optional)
+# python-dotenv>=1.0.0       # For Phase 9 - Environment variables

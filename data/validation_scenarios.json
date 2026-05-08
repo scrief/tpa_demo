@@ -1,0 +1,268 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "VAL-001",
+      "category": "perfect_match",
+      "scenario_name": "Perfect match - ABC Manufacturing WC Midwest",
+      "buyer_request_id": 1,
+      "expected_top_vendor": "Platinum Claims Group",
+      "expected_in_top_3": ["Platinum Claims Group", "NorthStar Claims", "Horizon Claims Services"],
+      "expected_reason_codes": [
+        "serves_all_required_states",
+        "handles_required_claim_type",
+        "strong_industry_match"
+      ],
+      "should_require_human_review": false,
+      "notes": "ABC Manufacturing scenario - perfect Midwest WC match with high score"
+    },
+    {
+      "scenario_id": "VAL-002",
+      "category": "perfect_match",
+      "scenario_name": "Perfect match - Healthcare WC Pacific",
+      "buyer_request_id": 2,
+      "expected_top_vendor": "Coastal Claims Partners",
+      "expected_in_top_3": ["Coastal Claims Partners"],
+      "expected_reason_codes": [
+        "serves_all_required_states",
+        "handles_required_claim_type"
+      ],
+      "should_require_human_review": false,
+      "notes": "Pacific Healthcare Group - strong regional match"
+    },
+    {
+      "scenario_id": "VAL-003",
+      "category": "perfect_match",
+      "scenario_name": "Perfect match - Auto Liability National",
+      "buyer_request_id": 3,
+      "expected_top_vendor": "Summit Risk Services",
+      "expected_in_top_3": ["Summit Risk Services"],
+      "expected_reason_codes": [
+        "handles_required_claim_type"
+      ],
+      "should_require_human_review": false,
+      "notes": "National Logistics - auto liability across CA/FL/TX"
+    },
+    {
+      "scenario_id": "VAL-004",
+      "category": "perfect_match",
+      "scenario_name": "Perfect match - Construction WC Northeast",
+      "buyer_request_id": 4,
+      "expected_top_vendor": "Atlantic Claims Group",
+      "expected_in_top_3": ["Atlantic Claims Group"],
+      "expected_reason_codes": [
+        "serves_all_required_states",
+        "handles_required_claim_type",
+        "strong_industry_match"
+      ],
+      "should_require_human_review": false,
+      "notes": "Northeast Construction - regional construction specialist"
+    },
+    {
+      "scenario_id": "VAL-005",
+      "category": "partial_match",
+      "scenario_name": "Partial match - Limited state coverage",
+      "buyer_request_id": 5,
+      "expected_top_vendor": "Mountain States Claims",
+      "expected_warning_codes": ["missing_required_service"],
+      "should_require_human_review": true,
+      "notes": "Mountain Tech Industries - limited to Mountain states only, score 75.9"
+    },
+    {
+      "scenario_id": "VAL-006",
+      "category": "partial_match",
+      "scenario_name": "Partial match - Multi-regional challenge",
+      "buyer_request_id": 11,
+      "expected_top_vendor": "Platinum Claims Group",
+      "expected_warning_codes": ["missing_required_state"],
+      "should_require_human_review": true,
+      "notes": "Premium Hotel Corporation - CA/TX/FL/NY difficult to cover, score 73.0"
+    },
+    {
+      "scenario_id": "VAL-007",
+      "category": "partial_match",
+      "scenario_name": "Partial match - Rare state combination",
+      "buyer_request_id": 14,
+      "expected_top_vendor": "Mountain States Claims",
+      "expected_warning_codes": ["missing_required_state"],
+      "should_require_human_review": true,
+      "notes": "Rare State Combo - unusual state requirements, score 76.3"
+    },
+    {
+      "scenario_id": "VAL-008",
+      "category": "partial_match",
+      "scenario_name": "Partial match - Multi-state distribution",
+      "buyer_request_id": 13,
+      "expected_top_vendor": "Platinum Claims Group",
+      "should_require_human_review": true,
+      "notes": "Multi-State Distribution Company - complex geography, score 87.1"
+    },
+    {
+      "scenario_id": "VAL-009",
+      "category": "data_quality",
+      "scenario_name": "Stale data warning - Texas Energy",
+      "buyer_request_id": 12,
+      "expected_top_vendor": "Texas Claims Unlimited",
+      "expected_warning_codes": ["stale_vendor_data"],
+      "should_require_human_review": true,
+      "notes": "Texas Energy Services - top vendor has stale data (>180 days)"
+    },
+    {
+      "scenario_id": "VAL-010",
+      "category": "data_quality",
+      "scenario_name": "Low score triggers review - Great Lakes",
+      "buyer_request_id": 9,
+      "expected_top_vendor": "Great Lakes Claims",
+      "should_require_human_review": true,
+      "notes": "Great Lakes Manufacturing - human review flagged despite high score"
+    },
+    {
+      "scenario_id": "VAL-011",
+      "category": "perfect_match",
+      "scenario_name": "Midwest retail WC strong match",
+      "buyer_request_id": 6,
+      "expected_top_vendor": "Midwest TPA Group",
+      "expected_in_top_3": ["Midwest TPA Group"],
+      "should_require_human_review": false,
+      "notes": "Midwest Retail Chain - strong regional fit, score 92.3"
+    },
+    {
+      "scenario_id": "VAL-012",
+      "category": "perfect_match",
+      "scenario_name": "Southeast hospitality GL match",
+      "buyer_request_id": 7,
+      "expected_top_vendor": "Southeast Risk Partners",
+      "expected_in_top_3": ["Southeast Risk Partners"],
+      "should_require_human_review": false,
+      "notes": "Southeast Hospitality - regional hospitality specialist, score 87.2"
+    },
+    {
+      "scenario_id": "VAL-013",
+      "category": "perfect_match",
+      "scenario_name": "Public entity education WC",
+      "buyer_request_id": 8,
+      "expected_top_vendor": "Capital Risk Management",
+      "expected_in_top_3": ["Capital Risk Management"],
+      "should_require_human_review": false,
+      "notes": "Public School District - education sector specialist, score 91.3"
+    },
+    {
+      "scenario_id": "VAL-014",
+      "category": "perfect_match",
+      "scenario_name": "Small employer group WC",
+      "buyer_request_id": 10,
+      "expected_top_vendor": "Horizon Claims Services",
+      "expected_in_top_3": ["Horizon Claims Services"],
+      "should_require_human_review": false,
+      "notes": "Small Town Employers Group - strong fit, score 93.4"
+    },
+    {
+      "scenario_id": "VAL-015",
+      "category": "perfect_match",
+      "scenario_name": "Property management specialty",
+      "buyer_request_id": 15,
+      "expected_top_vendor": "Premier Property Claims",
+      "expected_in_top_3": ["Premier Property Claims"],
+      "should_require_human_review": false,
+      "notes": "Property Management Holdings - property claims specialist, score 86.0"
+    },
+    {
+      "scenario_id": "VAL-016",
+      "category": "negative_test",
+      "scenario_name": "Excluded vendor never appears - Buyer 1",
+      "buyer_request_id": 1,
+      "test_type": "negative",
+      "vendor_must_not_appear": "Coastal Claims Partners",
+      "notes": "If buyer excludes Coastal Claims Partners, it should never appear in results"
+    },
+    {
+      "scenario_id": "VAL-017",
+      "category": "reason_codes",
+      "scenario_name": "Verify reason codes - top match buyer 1",
+      "buyer_request_id": 1,
+      "expected_reason_codes": [
+        "serves_all_required_states",
+        "handles_required_claim_type",
+        "strong_industry_match",
+        "high_satisfaction_score"
+      ],
+      "min_reason_codes": 10,
+      "notes": "Top match should have comprehensive reason codes explaining high score"
+    },
+    {
+      "scenario_id": "VAL-018",
+      "category": "reason_codes",
+      "scenario_name": "Verify geographic reason codes - regional match",
+      "buyer_request_id": 2,
+      "expected_reason_codes": [
+        "serves_all_required_states",
+        "strong_local_presence"
+      ],
+      "notes": "Coastal match should show strong local geographic fit"
+    },
+    {
+      "scenario_id": "VAL-019",
+      "category": "scoring_accuracy",
+      "scenario_name": "High score consistency - Buyer 1",
+      "buyer_request_id": 1,
+      "expected_score_range": {
+        "min": 95.0,
+        "max": 100.0
+      },
+      "notes": "Perfect match scenario should score 95+ for top vendor"
+    },
+    {
+      "scenario_id": "VAL-020",
+      "category": "scoring_accuracy",
+      "scenario_name": "Low score triggers review - Buyer 11",
+      "buyer_request_id": 11,
+      "expected_score_range": {
+        "min": 60.0,
+        "max": 75.0
+      },
+      "should_require_human_review": true,
+      "notes": "Difficult match should score 60-75 and trigger human review"
+    },
+    {
+      "scenario_id": "VAL-021",
+      "category": "ranking_order",
+      "scenario_name": "Top 3 ranking order - Buyer 1",
+      "buyer_request_id": 1,
+      "expected_ranking_order": [
+        "Platinum Claims Group",
+        "NorthStar Claims",
+        "Horizon Claims Services"
+      ],
+      "notes": "Top 3 should be in specific order based on scoring"
+    },
+    {
+      "scenario_id": "VAL-022",
+      "category": "human_review",
+      "scenario_name": "Human review flag accuracy - all low scores",
+      "test_type": "aggregate",
+      "notes": "All matches with score <70 should have human_review_required = true"
+    },
+    {
+      "scenario_id": "VAL-023",
+      "category": "human_review",
+      "scenario_name": "Human review flag accuracy - stale data",
+      "buyer_request_id": 12,
+      "should_require_human_review": true,
+      "expected_warning_codes": ["stale_vendor_data"],
+      "notes": "Stale data should trigger human review flag"
+    },
+    {
+      "scenario_id": "VAL-024",
+      "category": "data_completeness",
+      "scenario_name": "All buyers have match results",
+      "test_type": "aggregate",
+      "notes": "Every buyer request (1-15) should have at least 1 match result"
+    },
+    {
+      "scenario_id": "VAL-025",
+      "category": "data_completeness",
+      "scenario_name": "No duplicate ranks per buyer",
+      "test_type": "aggregate",
+      "notes": "Each buyer should have unique rank values (no ties or duplicates in ranking)"
+    }
+  ]
+}

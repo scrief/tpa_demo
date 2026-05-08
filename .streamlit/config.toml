@@ -1,0 +1,11 @@
+[theme]
+primaryColor = "#001F3F"           # Primary Navy - Headers/Primary Actions
+backgroundColor = "#FFFFFF"         # Pure White - Backgrounds
+secondaryBackgroundColor = "#F8FAFC"  # Light variant for cards/sidebar
+textColor = "#4A4A4A"              # Cool Gray - Body Text
+font = "sans serif"
+
+[server]
+headless = true
+enableXsrfProtection = true
+enableCORS = false

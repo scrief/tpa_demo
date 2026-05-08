@@ -1,0 +1,238 @@
+[
+  {
+    "row": 1,
+    "vendor_name_raw": "North Star Claims",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "MN WI IA IL",
+        "unknown": [
+          "MN WI IA IL"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 2,
+    "vendor_name_raw": "Midwest TPA Group",
+    "issues": [
+      {
+        "field": "headquarters",
+        "issue": "unknown_state",
+        "raw_value": "WI, Madison"
+      }
+    ]
+  },
+  {
+    "row": 6,
+    "vendor_name_raw": "Coastal Claims Partners",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "CA OR WA AZ",
+        "unknown": [
+          "CA OR WA AZ"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 9,
+    "vendor_name_raw": "Heartland TPA",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "MO KS NE IA",
+        "unknown": [
+          "MO KS NE IA"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 11,
+    "vendor_name_raw": "Southeast Risk Partners",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "GA FL SC NC TN",
+        "unknown": [
+          "GA FL SC NC TN"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 13,
+    "vendor_name_raw": "Premier Property Claims",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "FL TX LA SC",
+        "unknown": [
+          "FL TX LA SC"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 15,
+    "vendor_name_raw": "Legacy Claims Co.",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "OH IN KY",
+        "unknown": [
+          "OH IN KY"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 16,
+    "vendor_name_raw": "Midwest Claims Solutions",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "WI MN",
+        "unknown": [
+          "WI MN"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 17,
+    "vendor_name_raw": "Midwest Claims Solutions Inc",
+    "issues": [
+      {
+        "field": "last_updated",
+        "issue": "unparseable_date",
+        "raw_value": "Sept 2025"
+      }
+    ]
+  },
+  {
+    "row": 18,
+    "vendor_name_raw": "Regional Risk Administrators",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "IA NE",
+        "unknown": [
+          "IA NE"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 20,
+    "vendor_name_raw": "Pacific Northwest TPA",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "WA OR ID",
+        "unknown": [
+          "WA OR ID"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 22,
+    "vendor_name_raw": "Capital Risk Management",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "VA MD DC NC",
+        "unknown": [
+          "VA MD DC NC"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 23,
+    "vendor_name_raw": "Occupational Health Claims",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "TX AZ NM",
+        "unknown": [
+          "TX AZ NM"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 25,
+    "vendor_name_raw": "Evergreen Risk Services",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "WI MN IA IL",
+        "unknown": [
+          "WI MN IA IL"
+        ]
+      }
+    ]
+  },
+  {
+    "row": 26,
+    "vendor_name_raw": "Apex Claims Management",
+    "issues": [
+      {
+        "field": "states",
+        "issue": "unknown_states",
+        "raw_value": "MN WI",
+        "unknown": [
+          "MN WI"
+        ]
+      }
+    ]
+  },
+  {
+    "issue_type": "potential_duplicate",
+    "row1": 0,
+    "row2": 1,
+    "vendor1": "NorthStar Claims",
+    "vendor2": "North Star Claims",
+    "similarity": 0.9696969696969697
+  },
+  {
+    "issue_type": "potential_duplicate",
+    "row1": 2,
+    "row2": 3,
+    "vendor1": "Midwest TPA Group",
+    "vendor2": "MIDWEST TPA GROUP",
+    "similarity": 1.0
+  },
+  {
+    "issue_type": "potential_duplicate",
+    "row1": 7,
+    "row2": 8,
+    "vendor1": "Great Lakes Claims",
+    "vendor2": "Great Lakes Claims",
+    "similarity": 1.0
+  },
+  {
+    "issue_type": "potential_duplicate",
+    "row1": 16,
+    "row2": 17,
+    "vendor1": "Midwest Claims Solutions",
+    "vendor2": "Midwest Claims Solutions",
+    "similarity": 1.0
+  }
+]
