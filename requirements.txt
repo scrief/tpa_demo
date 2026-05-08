@@ -9,6 +9,7 @@ pandas>=2.0.0
 streamlit>=1.30.0
 plotly>=5.0.0
 
-# Future dependencies (for later phases):
-# openai>=1.0.0              # For Phase 9 - AI explanation layer (optional)
-# python-dotenv>=1.0.0       # For Phase 9 - Environment variables
+# Phase 9 - AI explanation layer
+openai>=1.0.0
+google-generativeai>=0.3.0
+python-dotenv>=1.0.0

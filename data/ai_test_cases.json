@@ -1,0 +1,218 @@
+{
+  "parsing_tests": [
+    {
+      "description": "Basic workers' comp request with states and priorities",
+      "input": "We need a workers' comp TPA for a manufacturing company with 500 employees in Minnesota, Wisconsin, and Iowa. Return-to-work programs and strong reporting capabilities are critical. Our current TPA has been slow to respond to claims.",
+      "expected": {
+        "industry": "manufacturing",
+        "claim_type_needed": "workers_comp",
+        "required_states": ["MN", "WI", "IA"],
+        "required_services": ["return_to_work"],
+        "priority_services": 5,
+        "priority_reporting": 5,
+        "priority_performance": 4
+      },
+      "min_confidence": 0.75
+    },
+    {
+      "description": "Healthcare GL request with cost sensitivity",
+      "input": "Healthcare client needs general liability coverage for their operations in California and Nevada. Budget-conscious and prefer established vendors.",
+      "expected": {
+        "industry": "healthcare",
+        "claim_type_needed": "general_liability",
+        "required_states": ["CA", "NV"],
+        "priority_cost": 4
+      },
+      "min_confidence": 0.7
+    },
+    {
+      "description": "Construction multi-line with technology emphasis",
+      "input": "Construction firm seeking multi-line TPA covering Texas, Arizona, New Mexico. Must have API integration and real-time reporting dashboard. Self-insured program.",
+      "expected": {
+        "industry": "construction",
+        "claim_type_needed": "multi_line",
+        "program_type": "self_insured",
+        "required_states": ["TX", "AZ", "NM"],
+        "priority_technology": 5,
+        "priority_reporting": 4
+      },
+      "min_confidence": 0.75
+    },
+    {
+      "description": "Retail auto liability across multiple states",
+      "input": "National retail chain with auto liability needs. Operating in all northeastern states. Fraud investigation is a top priority.",
+      "expected": {
+        "industry": "retail",
+        "claim_type_needed": "auto_liability",
+        "required_services": ["fraud_investigation"],
+        "priority_services": 5
+      },
+      "min_confidence": 0.65
+    },
+    {
+      "description": "Vague request testing low confidence handling",
+      "input": "Need TPA for claims. Looking for good service.",
+      "expected": {},
+      "min_confidence": 0.3
+    },
+    {
+      "description": "Complex request with multiple services",
+      "input": "Manufacturing company in Michigan, Ohio, Indiana needs workers' comp TPA. Require return-to-work, nurse case management, and medical bill review. Strong industry experience required. Fully insured program. Around 1200 employees.",
+      "expected": {
+        "industry": "manufacturing",
+        "claim_type_needed": "workers_comp",
+        "program_type": "fully_insured",
+        "required_states": ["MI", "OH", "IN"],
+        "required_services": ["return_to_work", "nurse_case_management", "medical_bill_review"],
+        "employee_count": 1200,
+        "priority_services": 5,
+        "priority_industry": 5
+      },
+      "min_confidence": 0.8
+    },
+    {
+      "description": "Hospitality property claim with regional focus",
+      "input": "Hotel chain needs property claims TPA for Florida and Georgia properties. Local presence preferred. Quick response times essential.",
+      "expected": {
+        "industry": "hospitality",
+        "claim_type_needed": "property",
+        "required_states": ["FL", "GA"],
+        "priority_geography": 4,
+        "priority_performance": 5
+      },
+      "min_confidence": 0.7
+    },
+    {
+      "description": "Technology company with emphasis on reporting",
+      "input": "Tech startup, 200 employees, needs WC coverage in California. Detailed analytics and custom reporting are must-haves. API access required.",
+      "expected": {
+        "industry": "technology",
+        "claim_type_needed": "workers_comp",
+        "required_states": ["CA"],
+        "employee_count": 200,
+        "priority_reporting": 5,
+        "priority_technology": 5
+      },
+      "min_confidence": 0.75
+    },
+    {
+      "description": "Educational institution with broad coverage",
+      "input": "University system seeking GL and property TPA for campuses in New York, New Jersey, Pennsylvania. Legal support capability needed.",
+      "expected": {
+        "industry": "education",
+        "claim_type_needed": "multi_line",
+        "required_states": ["NY", "NJ", "PA"],
+        "required_services": ["legal_support"]
+      },
+      "min_confidence": 0.7
+    },
+    {
+      "description": "Transportation with subrogation focus",
+      "input": "Trucking company needs auto liability TPA for operations across Midwest. Subrogation expertise is critical. Operating in IL, WI, IN, MI, OH.",
+      "expected": {
+        "industry": "transportation",
+        "claim_type_needed": "auto_liability",
+        "required_states": ["IL", "WI", "IN", "MI", "OH"],
+        "required_services": ["subrogation"],
+        "priority_services": 5
+      },
+      "min_confidence": 0.75
+    }
+  ],
+  
+  "explanation_tests": [
+    {
+      "description": "Top match for buyer 1",
+      "buyer_id": 1,
+      "vendor_id": 1,
+      "expectations": "Should explain geographic fit and claims expertise"
+    },
+    {
+      "description": "Second match for buyer 1",
+      "buyer_id": 1,
+      "vendor_id": 2,
+      "expectations": "Should mention any gaps or considerations"
+    },
+    {
+      "description": "Top match for buyer 2",
+      "buyer_id": 2,
+      "vendor_id": 3,
+      "expectations": "Should highlight strengths aligned with buyer priorities"
+    }
+  ],
+  
+  "hallucination_tests": [
+    {
+      "description": "False state claim - vendor doesn't serve California",
+      "text": "This vendor serves all major markets including California, Oregon, and Washington with dedicated local adjusters in each state.",
+      "vendor_id": 1,
+      "expected_hallucinations": 2,
+      "notes": "Assuming vendor 1 doesn't serve CA, OR, or WA"
+    },
+    {
+      "description": "False service claim - AI-powered routing",
+      "text": "They offer cutting-edge AI-powered claim routing and blockchain-based fraud detection systems.",
+      "vendor_id": 1,
+      "expected_hallucinations": 2,
+      "notes": "These futuristic services likely not in database"
+    },
+    {
+      "description": "Inflated score claim",
+      "text": "With a client satisfaction score of 98 out of 100, they consistently exceed industry standards.",
+      "vendor_id": 1,
+      "expected_hallucinations": 1,
+      "notes": "Score likely doesn't match database"
+    },
+    {
+      "description": "False claim type capability",
+      "text": "As a specialized auto liability administrator, they also handle workers' compensation and professional liability claims.",
+      "vendor_id": 1,
+      "expected_hallucinations": 1,
+      "notes": "Assuming vendor doesn't handle all these types"
+    },
+    {
+      "description": "Clean explanation - no hallucinations",
+      "text": "This vendor serves Minnesota, Wisconsin, and Iowa with strong workers' compensation expertise and return-to-work programs.",
+      "vendor_id": 1,
+      "expected_hallucinations": 0,
+      "notes": "All claims should match vendor 1 capabilities"
+    },
+    {
+      "description": "Multiple state hallucinations",
+      "text": "They provide nationwide coverage across all 50 states with local adjusters in every major metropolitan area.",
+      "vendor_id": 1,
+      "expected_hallucinations": 3,
+      "notes": "Vendor likely doesn't serve all 50 states"
+    },
+    {
+      "description": "Service capability overreach",
+      "text": "Their comprehensive service suite includes return-to-work, nurse case management, medical bill review, fraud investigation, subrogation, legal support, and wellness programs.",
+      "vendor_id": 1,
+      "expected_hallucinations": 1,
+      "notes": "Likely missing some of these services"
+    },
+    {
+      "description": "Industry expertise exaggeration",
+      "text": "With decades of experience across manufacturing, construction, healthcare, retail, hospitality, and technology sectors, they understand your industry deeply.",
+      "vendor_id": 1,
+      "expected_hallucinations": 1,
+      "notes": "Vendor probably doesn't serve all these industries"
+    }
+  ],
+  
+  "test_notes": {
+    "parsing": "Tests cover various industries, claim types, complexity levels, and confidence scenarios. Expected to achieve 80%+ accuracy on core fields.",
+    "explanations": "Tests verify explanations are generated, substantive, and free of high-severity hallucinations. Expected zero high-severity issues.",
+    "hallucinations": "Tests both false positives (detecting issues) and false negatives (clean text). Expected 90%+ detection rate on known issues.",
+    "followups": "Tests verify appropriate questions are generated based on request completeness and match quality."
+  },
+  
+  "success_criteria": {
+    "parsing_accuracy": "80%+ on industry, claim type, states",
+    "parsing_confidence_correlation": "Low confidence should correlate with actual inaccuracy",
+    "explanation_length": "Minimum 100 characters, ideally 200-600",
+    "hallucination_rate": "Zero high-severity in production explanations",
+    "hallucination_detection": "90%+ detection on known false claims",
+    "followup_relevance": "3-5 questions when gaps exist, 0-1 for complete requests"
+  }
+}
