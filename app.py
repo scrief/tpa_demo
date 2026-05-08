@@ -524,6 +524,21 @@ def show_match_form():
     elif 'form_selected_states' not in st.session_state:
         st.session_state.form_selected_states = set()
     
+    # Pre-populate checkbox session state keys (needed because checkboxes use keys)
+    # Get all states once to set checkbox keys before form renders
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT state_code FROM vendor_states ORDER BY state_code")
+    all_db_states = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    
+    # Set checkbox keys in session state based on form_selected_states
+    for state in all_db_states:
+        checkbox_key = f"state_checkbox_{state}"
+        # Only set if not already in session state (don't override user changes)
+        if checkbox_key not in st.session_state:
+            st.session_state[checkbox_key] = (state in st.session_state.form_selected_states)
+    
     with st.form("match_request_form"):
         # Section 1: Basic Information
         st.markdown("### 📋 Basic Information")
